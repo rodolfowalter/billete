@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Precios de dólar y euro</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+ 	<link rel="stylesheet" href="css.css">
+	<style>
+		body {
+			font-family: 'Lato', sans-serif;
+		}
+		.flex-container {
+			display: flex;
+			justify-content: space-between;
+		}
+		.flex-column {
+			flex-basis: 48%;
+			text-align: center;
+		}
+		.flex-column p {
+			margin: 0;
+		}
+		h1, h2 {
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<h1>Precios de dólar y euro</h1>
+	<p>Última actualización: <span id="last-update"></span></p>
+	<button id="refresh-btn">Actualizar</button>
+	<div class="flex-container">
+		<div class="currency-container">
+  			<div class="currency-column">
+    			<h2>Dólar</h2>
+   			 	<div style="display: flex; gap: 10px;">
+  <p>Compra: <span id="dolar-buy"></span></p>
+  <p>Venta: <span id="dolar-sell"></span></p>
+</div>
+   			 	<p class="average">Promedio: <span id="dolar-avg"></span></p>
+ 			 </div>
+ 			 <div class="currency-column">
+  			 	<h2>Euro</h2>
+  			 	<div style="display: flex; gap: 10px;">
+               <p>Compra: <span id="euro-buy"></span></p>
+ 			  	<p>Venta: <span id="euro-sell"></span></p>
+                  </div>
+  			 	<p class="average">Promedio: <span id="euro-avg"></span></p>
+ 			  </div>
+			</div>
+		</div>
+	<script>
+		function updateValues() {
+			$.getJSON("https://api.bluelytics.com.ar/v2/latest", function(data) {
+				$("#last-update").text(data.last_update);
+
+				$("#dolar-buy").text(data.blue.value_buy);
+				$("#dolar-avg").text(data.blue.value_avg);
+				$("#dolar-sell").text(data.blue.value_sell);
+
+				$("#euro-buy").text(data.blue_euro.value_buy);
+				$("#euro-avg").text(data.blue_euro.value_avg);
+				$("#euro-sell").text(data.blue_euro.value_sell);
+			});
+		}
+
+		// Actualizar valores al cargar la página
+		updateValues();
+
+		// Actualizar valores al hacer clic en el botón de actualizar
+		$("#refresh-btn").click(function() {
+			updateValues();
+		});
+	</script>
+</body>
+</html>
